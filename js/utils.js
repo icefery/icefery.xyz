@@ -95,12 +95,15 @@ const btf = {
 
   loadComment: (dom, callback) => {
     if ('IntersectionObserver' in window) {
-      const observerItem = new IntersectionObserver((entries) => {
-        if (entries[0].isIntersecting) {
-          callback()
-          observerItem.disconnect()
-        }
-      }, { threshold: [0] })
+      const observerItem = new IntersectionObserver(
+        entries => {
+          if (entries[0].isIntersecting) {
+            callback()
+            observerItem.disconnect()
+          }
+        },
+        { threshold: [0] }
+      )
       observerItem.observe(dom)
     } else {
       callback()
@@ -122,13 +125,13 @@ const btf = {
 
     let start = null
     pos = +pos
-    window.requestAnimationFrame(function step (currentTime) {
+    window.requestAnimationFrame(function step(currentTime) {
       start = !start ? currentTime : start
       const progress = currentTime - start
       if (currentPos < pos) {
-        window.scrollTo(0, ((pos - currentPos) * progress / time) + currentPos)
+        window.scrollTo(0, ((pos - currentPos) * progress) / time + currentPos)
       } else {
-        window.scrollTo(0, currentPos - ((currentPos - pos) * progress / time))
+        window.scrollTo(0, currentPos - ((currentPos - pos) * progress) / time)
       }
       if (progress < time) {
         window.requestAnimationFrame(step)
@@ -144,7 +147,7 @@ const btf = {
   },
 
   animateOut: (ele, text) => {
-    ele.addEventListener('animationend', function f () {
+    ele.addEventListener('animationend', function f() {
       ele.style.display = ''
       ele.style.animation = ''
       ele.removeEventListener('animationend', f)
@@ -208,15 +211,7 @@ const btf = {
           Toolbar: {
             display: {
               left: ['infobar'],
-              middle: [
-                'zoomIn',
-                'zoomOut',
-                'toggle1to1',
-                'rotateCCW',
-                'rotateCW',
-                'flipX',
-                'flipY'
-              ],
+              middle: ['zoomIn', 'zoomOut', 'toggle1to1', 'rotateCCW', 'rotateCW', 'flipX', 'flipY'],
               right: ['slideshow', 'thumbs', 'close']
             }
           }
@@ -242,14 +237,18 @@ const btf = {
     }
   },
 
-  updateAnchor: (anchor) => {
+  updateAnchor: anchor => {
     if (anchor !== window.location.hash) {
       if (!anchor) anchor = location.pathname
       const title = GLOBAL_CONFIG_SITE.title
-      window.history.replaceState({
-        url: location.href,
-        title
-      }, title, anchor)
+      window.history.replaceState(
+        {
+          url: location.href,
+          title
+        },
+        title,
+        anchor
+      )
     }
   },
 
@@ -257,10 +256,10 @@ const btf = {
     const docHeight = ele.clientHeight
     const winHeight = document.documentElement.clientHeight
     const headerHeight = ele.offsetTop
-    const contentMath = (docHeight > winHeight) ? (docHeight - winHeight) : (document.documentElement.scrollHeight - winHeight)
-    const scrollPercent = (currentTop - headerHeight) / (contentMath)
+    const contentMath = docHeight > winHeight ? docHeight - winHeight : document.documentElement.scrollHeight - winHeight
+    const scrollPercent = (currentTop - headerHeight) / contentMath
     const scrollPercentRounded = Math.round(scrollPercent * 100)
-    const percentage = (scrollPercentRounded > 100) ? 100 : (scrollPercentRounded <= 0) ? 0 : scrollPercentRounded
+    const percentage = scrollPercentRounded > 100 ? 100 : scrollPercentRounded <= 0 ? 0 : scrollPercentRounded
     return percentage
   },
 

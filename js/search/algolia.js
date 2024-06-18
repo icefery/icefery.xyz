@@ -8,10 +8,12 @@ window.addEventListener('load', () => {
     bodyStyle.overflow = 'hidden'
     btf.animateIn($searchMask, 'to_show 0.5s')
     btf.animateIn($searchDialog, 'titleScale 0.5s')
-    setTimeout(() => { document.querySelector('#algolia-search .ais-SearchBox-input').focus() }, 100)
+    setTimeout(() => {
+      document.querySelector('#algolia-search .ais-SearchBox-input').focus()
+    }, 100)
 
     // shortcut: ESC
-    document.addEventListener('keydown', function f (event) {
+    document.addEventListener('keydown', function f(event) {
       if (event.code === 'Escape') {
         closeSearch()
         document.removeEventListener('keydown', f)
@@ -84,7 +86,7 @@ window.addEventListener('load', () => {
     indexName: algolia.indexName,
     /* global algoliasearch */
     searchClient: algoliasearch(algolia.appId, algolia.apiKey),
-    searchFunction (helper) {
+    searchFunction(helper) {
       helper.state.query && helper.search()
     }
   })
@@ -104,8 +106,8 @@ window.addEventListener('load', () => {
   const hits = instantsearch.widgets.hits({
     container: '#algolia-hits',
     templates: {
-      item (data) {
-        const link = data.permalink ? data.permalink : (GLOBAL_CONFIG.root + data.path)
+      item(data) {
+        const link = data.permalink ? data.permalink : GLOBAL_CONFIG.root + data.path
         const result = data._highlightResult
         const content = result.contentStripTruncate
           ? cutContent(result.contentStripTruncate.value)
@@ -121,11 +123,7 @@ window.addEventListener('load', () => {
           </a>`
       },
       empty: function (data) {
-        return (
-          '<div id="algolia-hits-empty">' +
-          GLOBAL_CONFIG.algolia.languages.hits_empty.replace(/\$\{query}/, data.query) +
-          '</div>'
-        )
+        return '<div id="algolia-hits-empty">' + GLOBAL_CONFIG.algolia.languages.hits_empty.replace(/\$\{query}/, data.query) + '</div>'
       }
     }
   })
@@ -134,12 +132,8 @@ window.addEventListener('load', () => {
     container: '#algolia-info > .algolia-stats',
     templates: {
       text: function (data) {
-        const stats = GLOBAL_CONFIG.algolia.languages.hits_stats
-          .replace(/\$\{hits}/, data.nbHits)
-          .replace(/\$\{time}/, data.processingTimeMS)
-        return (
-          `<hr>${stats}`
-        )
+        const stats = GLOBAL_CONFIG.algolia.languages.hits_stats.replace(/\$\{hits}/, data.nbHits).replace(/\$\{time}/, data.processingTimeMS)
+        return `<hr>${stats}`
       }
     }
   })
@@ -171,7 +165,8 @@ window.addEventListener('load', () => {
     searchClickFn()
   })
 
-  window.pjax && search.on('render', () => {
-    window.pjax.refresh(document.getElementById('algolia-hits'))
-  })
+  window.pjax &&
+    search.on('render', () => {
+      window.pjax.refresh(document.getElementById('algolia-hits'))
+    })
 })

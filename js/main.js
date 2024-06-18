@@ -82,7 +82,9 @@ document.addEventListener('DOMContentLoaded', function () {
         const prevEle = ele.previousElementSibling
         prevEle.textContent = text
         prevEle.style.opacity = 1
-        setTimeout(() => { prevEle.style.opacity = 0 }, 800)
+        setTimeout(() => {
+          prevEle.style.opacity = 0
+        }, 800)
       }
     }
 
@@ -201,7 +203,7 @@ document.addEventListener('DOMContentLoaded', function () {
    * justified-gallery 圖庫排版
    */
 
-  const fetchUrl = async (url) => {
+  const fetchUrl = async url => {
     const response = await fetch(url)
     return await response.json()
   }
@@ -220,7 +222,14 @@ document.addEventListener('DOMContentLoaded', function () {
     })
 
     if (tabs) {
-      btf.addGlobalFn('igOfTabs', () => { ig.destroy() }, false, tabs)
+      btf.addGlobalFn(
+        'igOfTabs',
+        () => {
+          ig.destroy()
+        },
+        false,
+        tabs
+      )
     }
 
     const replaceDq = str => str.replace(/"/g, '&quot;') // replace double quotes to &quot;
@@ -307,7 +316,9 @@ document.addEventListener('DOMContentLoaded', function () {
       ig.renderItems()
     }
 
-    btf.addGlobalFn('justifiedGallery', () => { ig.destroy() })
+    btf.addGlobalFn('justifiedGallery', () => {
+      ig.destroy()
+    })
   }
 
   const addJustifiedGallery = async (ele, tabs = false) => {
@@ -419,8 +430,8 @@ document.addEventListener('DOMContentLoaded', function () {
   }
 
   /**
-  * toc,anchor
-  */
+   * toc,anchor
+   */
   const scrollFnToDo = () => {
     const isToc = GLOBAL_CONFIG_SITE.isToc
     const isAnchor = GLOBAL_CONFIG.isAnchor
@@ -454,7 +465,7 @@ document.addEventListener('DOMContentLoaded', function () {
       autoScrollToc = item => {
         const activePosition = item.getBoundingClientRect().top
         const sidebarScrollTop = $cardToc.scrollTop
-        if (activePosition > (document.documentElement.clientHeight - 100)) {
+        if (activePosition > document.documentElement.clientHeight - 100) {
           $cardToc.scrollTop = sidebarScrollTop + 150
         }
         if (activePosition < 100) {
@@ -489,7 +500,9 @@ document.addEventListener('DOMContentLoaded', function () {
       detectItem = currentIndex
 
       if (isToc) {
-        $cardToc.querySelectorAll('.active').forEach(i => { i.classList.remove('active') })
+        $cardToc.querySelectorAll('.active').forEach(i => {
+          i.classList.remove('active')
+        })
 
         if (currentId === '') {
           return
@@ -544,7 +557,8 @@ document.addEventListener('DOMContentLoaded', function () {
    * Rightside
    */
   const rightSideFn = {
-    readmode: () => { // read mode
+    readmode: () => {
+      // read mode
       const $body = document.body
       $body.classList.add('read-mode')
       const newEle = document.createElement('button')
@@ -560,7 +574,8 @@ document.addEventListener('DOMContentLoaded', function () {
 
       newEle.addEventListener('click', clickFn)
     },
-    darkmode: () => { // switch between light and dark mode
+    darkmode: () => {
+      // switch between light and dark mode
       const willChangeMode = document.documentElement.getAttribute('data-theme') === 'dark' ? 'light' : 'dark'
       if (willChangeMode === 'dark') {
         activateDarkMode()
@@ -572,7 +587,8 @@ document.addEventListener('DOMContentLoaded', function () {
       saveToLocal.set('theme', willChangeMode, 2)
       handleThemeChange(willChangeMode)
     },
-    'rightside-config': item => { // Show or hide rightside-hide-btn
+    'rightside-config': item => {
+      // Show or hide rightside-hide-btn
       const hideLayout = item.firstElementChild
       if (hideLayout.classList.contains('show')) {
         hideLayout.classList.add('status')
@@ -583,27 +599,36 @@ document.addEventListener('DOMContentLoaded', function () {
 
       hideLayout.classList.toggle('show')
     },
-    'go-up': () => { // Back to top
+    'go-up': () => {
+      // Back to top
       btf.scrollToDest(0, 500)
     },
-    'hide-aside-btn': () => { // Hide aside
+    'hide-aside-btn': () => {
+      // Hide aside
       const $htmlDom = document.documentElement.classList
       const saveStatus = $htmlDom.contains('hide-aside') ? 'show' : 'hide'
       saveToLocal.set('aside-status', saveStatus, 2)
       $htmlDom.toggle('hide-aside')
     },
-    'mobile-toc-button': item => { // Show mobile toc
+    'mobile-toc-button': item => {
+      // Show mobile toc
       const tocEle = document.getElementById('card-toc')
       tocEle.style.transition = 'transform 0.3s ease-in-out'
       tocEle.classList.toggle('open')
-      tocEle.addEventListener('transitionend', () => {
-        tocEle.style.transition = ''
-      }, { once: true })
+      tocEle.addEventListener(
+        'transitionend',
+        () => {
+          tocEle.style.transition = ''
+        },
+        { once: true }
+      )
     },
-    'chat-btn': () => { // Show chat
+    'chat-btn': () => {
+      // Show chat
       window.chatBtnFn()
     },
-    translateLink: () => { // switch between traditional and simplified chinese
+    translateLink: () => {
+      // switch between traditional and simplified chinese
       window.translateFn.translatePage()
     }
   }
@@ -633,17 +658,19 @@ document.addEventListener('DOMContentLoaded', function () {
    * 手机端目录点击
    */
   const openMobileMenu = () => {
-    const handleClick = () => { sidebarFn.open() }
+    const handleClick = () => {
+      sidebarFn.open()
+    }
     btf.addEventListenerPjax(document.getElementById('toggle-menu'), 'click', handleClick)
   }
 
   /**
- * 複製時加上版權信息
- */
+   * 複製時加上版權信息
+   */
   const addCopyright = () => {
     const { limitCount, languages } = GLOBAL_CONFIG.copyright
 
-    const handleCopy = (e) => {
+    const handleCopy = e => {
       e.preventDefault()
       const copyFont = window.getSelection(0).toString()
       let textFont = copyFont
@@ -746,7 +773,7 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
     const addTabToTopEventListener = item => {
-      const btnClickHandler = (e) => {
+      const btnClickHandler = e => {
         const target = e.target.closest('button')
         if (!target) return
         btf.scrollToDest(btf.getEleTop(item), 300)
@@ -765,7 +792,7 @@ document.addEventListener('DOMContentLoaded', function () {
     const cardCategory = document.querySelector('#aside-cat-list.expandBtn')
     if (!cardCategory) return
 
-    const handleToggleBtn = (e) => {
+    const handleToggleBtn = e => {
       const target = e.target
       if (target.nodeName === 'I') {
         e.preventDefault()
@@ -828,7 +855,9 @@ document.addEventListener('DOMContentLoaded', function () {
       mobileSidebarOpen && btf.isHidden(document.getElementById('toggle-menu')) && sidebarFn.close()
     })
 
-    document.getElementById('menu-mask').addEventListener('click', e => { sidebarFn.close() })
+    document.getElementById('menu-mask').addEventListener('click', e => {
+      sidebarFn.close()
+    })
 
     clickFnOfSubMenu()
     GLOBAL_CONFIG.islazyload && lazyloadImg()
