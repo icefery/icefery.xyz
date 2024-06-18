@@ -1,0 +1,10 @@
+{
+  "scripts": {
+    "format": "prettier -w . && git ls-files --exclude-standard -z -o | xargs -0 dos2unix --remove-bom --safe",
+    "prepare": "husky"
+  },
+  "devDependencies": {
+    "husky": "^9.0.11",
+    "prettier": "^3.3.2"
+  }
+}

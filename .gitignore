@@ -1,0 +1,17 @@
+### mac
+/**/.DS_Store
+
+### idea
+/**/.idea/
+/**/*.iml
+
+### vscode
+/**/.vscode/
+
+### node
+/**/node_modules/
+/**/package-lock.json
+/**/yarn.lock
+/**/yarn-*.log
+/**/pnpm-*.yaml
+
